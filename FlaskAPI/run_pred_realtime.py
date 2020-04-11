@@ -8,13 +8,19 @@ from sodapy import Socrata
 import json
 from datetime import datetime, timedelta, timezone, date
 import os
+import logging
 
 google_map_key = 'AIzaSyA723t8eXV4ZpJgaoXBncDXLrlXdzr4tTw'
 
 dir_path = os.path.dirname(os.path.abspath(__file__))
 
-#debug
-print("dir_path")
+
+logger = logging.getLogger('myapp')
+hdlr = logging.FileHandler('/var/tmp/myapp.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+hdlr.setFormatter(formatter)
+logger.addHandler(hdlr) 
+logger.setLevel(logging.WARNING)
 
 def get_realtime_congestion():
     # reference: https://dev.socrata.com/foundry/data.cityofchicago.org/n4j6-wkkf
@@ -46,6 +52,8 @@ def download_weather_data(dates):
         date = date.strftime('%Y%m%d')
         res = requests.get(url + date)
         json_str = res.content
+        logger.error("url:", (url + date))
+        logger.error("json_str:", json_str)
         new_dict = json.loads(json_str)
         weather.extend(new_dict['observations'])
     weather_df = pd.DataFrame(weather)
