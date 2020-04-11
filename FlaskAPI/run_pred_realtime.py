@@ -7,10 +7,14 @@ import pickle
 from sodapy import Socrata
 import json
 from datetime import datetime, timedelta, timezone, date
+import os
 
 google_map_key = 'AIzaSyA723t8eXV4ZpJgaoXBncDXLrlXdzr4tTw'
 
 dir_path = os.path.dirname(os.path.abspath(__file__))
+
+#debug
+print("dir_path")
 
 def get_realtime_congestion():
     # reference: https://dev.socrata.com/foundry/data.cityofchicago.org/n4j6-wkkf

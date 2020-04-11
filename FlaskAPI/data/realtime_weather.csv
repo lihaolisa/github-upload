@@ -1,4 +1,5 @@
 Time,Temperature (F),Dew Point (F),Humidity (%),Wind Direction,Wind Speed (mph),Wind Gust (mph),Pressure (in),Precipitation Hourly (in),Condition
+2020-04-10 23:53:00,42,29,60,CALM,0,,29.31,0.0,Mostly Cloudy
 2020-04-10 22:53:00,41,28,60,S,3,,29.3,0.0,Mostly Cloudy
 2020-04-10 21:53:00,41,28,60,SE,5,,29.3,0.0,Mostly Cloudy
 2020-04-10 20:53:00,42,28,58,ESE,6,,29.29,0.0,Mostly Cloudy
