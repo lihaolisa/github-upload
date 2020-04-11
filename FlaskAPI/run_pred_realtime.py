@@ -100,7 +100,7 @@ def pred_all_segments_prob():
     # TODO: Confirm if these are the features to run model. May need value transformation
     X = features 
     
-    model = pickle.load(open(dir_path, 'model.pkl', 'rb'))
+    model = pickle.load(open(os.path.join(dir_path, 'model.pkl'), 'rb'))
     # TODO: let model prediction run through. Temporarily using random numbers
     # X['Prob'] = model.predict_proba(X)
     X['Prob'] = np.random.uniform(size=len(X))

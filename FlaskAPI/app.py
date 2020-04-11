@@ -21,7 +21,7 @@ def heatmap():
 @app.route('/route_plan',methods=['POST'])
 def route_plan():
     data = request.get_json(force=True)
-    model = pickle.load(open(os.getcwd(), 'model.pkl', 'rb'))
+    model = pickle.load(open(os.path.join(dir_path, 'model.pkl'), 'rb'))
     prediction = model.predict([np.array(list(data.values()))])
     output = prediction[0]
     return jsonify(output)
