@@ -16,7 +16,7 @@
 	<h1>Sales Forecasting</h1>
 
      <!-- Main Input For Receiving Query to our ML -->
-    <form action="{{ url_for('predict')}}"method="post">
+    <form action="{{ url_for('heatmap')}}"method="post">
     	<input type="text" name="origin" placeholder="rate" required="required" />
         <input type="text" name="distination" placeholder="sales in first month" required="required" />
 		<input type="text" name="sales in second month" placeholder="sales in second month" required="required" />

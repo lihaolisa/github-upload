@@ -2,6 +2,7 @@
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 from  run_pred_realtime import pred_all_segments_prob
+import pickle
 
 app = Flask(__name__)
 
@@ -19,6 +20,7 @@ def heatmap():
 @app.route('/route_plan',methods=['POST'])
 def route_plan():
     data = request.get_json(force=True)
+    model = pickle.load(open('model.pkl', 'rb'))
     prediction = model.predict([np.array(list(data.values()))])
     output = prediction[0]
     return jsonify(output)
