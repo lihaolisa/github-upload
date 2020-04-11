@@ -53,7 +53,7 @@ def download_weather_data(dates):
         res = requests.get(url + date)
         json_str = res.content
         logger.error("url:" + str(url + date))
-        logger.error("json_str:" + json_str)
+        logger.error("json_str:" + str(json_str))
         new_dict = json.loads(json_str)
         weather.extend(new_dict['observations'])
     weather_df = pd.DataFrame(weather)
