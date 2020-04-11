@@ -9,8 +9,7 @@ import json
 from datetime import datetime, timedelta, timezone, date
 import os
 import logging
-
-google_map_key = 'AIzaSyA723t8eXV4ZpJgaoXBncDXLrlXdzr4tTw'
+import googlemaps
 
 dir_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -55,7 +54,10 @@ def download_weather_data(dates):
         logger.error("url:" + str(url + date))
         logger.error("json_str:" + str(json_str))
         new_dict = json.loads(json_str)
-        weather.extend(new_dict['observations'])
+        try:
+            weather.extend(new_dict['observations'])
+        except:
+            pass # at midnight, no new observations. use the last observation yesterday
     weather_df = pd.DataFrame(weather)
     return weather_df
 
@@ -113,12 +115,30 @@ def pred_all_segments_prob():
     return results_json
 
 
-def call_google(origin, destination, googlekey):
-    PARAMS = {'origin': origin, 'destination': destination, 'key': googlekey, }
-    URL = "https://maps.googleapis.com/maps/api/directions/json"
-    res = requests.get(url=URL, params=PARAMS)
-    data = res.json()
+def call_google_map(origin, destination):
+    # reference: https://github.com/googlemaps/google-maps-services-python
+    google_map_key = 'AIzaSyA723t8eXV4ZpJgaoXBncDXLrlXdzr4tTw'
+    gmaps = googlemaps.Client(key=google_map_key)
 
+    # Geocoding an address
+    origin_geocode = gmaps.geocode(origin)
+    print('Origin geocode: ' + origin_geocode)
+    destination_geocode = gmaps.geocode(destination)
+    print('Destination geocode: ' + destination_geocode)
+
+    # Look up an address with reverse geocoding
+    # reverse_geocode_result = gmaps.reverse_geocode((40.714224, -73.961452))
+
+    # Request directions 
+    now = datetime.now()
+    # our model predicts crash prob on Chicago’s arterial streets (nonfreeway), so avoid highways
+    # alternatives: If True, more than one route may be returned in the response.
+    directions_result = gmaps.directions(origin, destination,
+                                        mode="driving",
+                                        avoid='Highways',
+                                        alternatives=True
+                                        departure_time=now)
+    """                                
     # parse json to retrieve all lat-lng
     waypoints = data['routes'][0]['legs']
 
@@ -140,7 +160,7 @@ def call_google(origin, destination, googlekey):
     print("total waypoints: " + str(google_count_lat_long))
 
     return lats, longs, google_count_lat_long
-
+"""
 
 
 def calc_distance(accident_dataset, lats, longs, google_count_lat_long):
@@ -170,13 +190,11 @@ def calc_distance(accident_dataset, lats, longs, google_count_lat_long):
     return new
 
 
-def pred_search_route_prob(origin, destination, tm):
-
-    #parse time
-    datetime_object = datetime.datetime.strptime(tm, '%Y-%m-%dT%H:%M')
-
+def pred_search_route_prob(origin, destination):
     # get route planning
-    lats, longs, google_count_lat_long = call_google(origin, destination, googlekey)
+    call_google_map(origin, destination)
+    """
+    lats, longs, google_count_lat_long = 
 
     # calculate distance between past accident points and route
     dist = calc_distance(accident_dataset, lats, longs, google_count_lat_long)
@@ -218,7 +236,7 @@ def pred_search_route_prob(origin, destination, tm):
         final["accidents"] = processed_results
 
         return final
-
+        """
 if __name__ == "__main__":
     # pred_result_json = pred_all_segments_prob()  # to show heat map
     # example of pred_result_json:
@@ -234,5 +252,7 @@ if __name__ == "__main__":
     #             "Prob":0.012699349}}
     # TODO: need to call Google map to get intermediate points in order to draw lines?
     
-    pred_search_route_prob()  # search route by calling google map. return crash prob on each route (number of routes >= 1)
+    origin = 'Chicago Illuminating Company, 2110 S Wabash Ave, Chicago, IL 60616'
+    destination = 'The Bridgeport Art Center, 1200 W 35th St, Chicago, IL 60609'
+    pred_search_route_prob(origin, destination)  # search route by calling google map. return crash prob on each route (number of routes >= 1)
 
