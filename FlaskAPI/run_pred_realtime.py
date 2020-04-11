@@ -16,7 +16,7 @@ dir_path = os.path.dirname(os.path.abspath(__file__))
 
 
 logger = logging.getLogger('myapp')
-hdlr = logging.FileHandler('/var/tmp/myapp.log')
+hdlr = logging.FileHandler(os.path.join(dir_path,'/tmp/myapp.log'))
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr) 
