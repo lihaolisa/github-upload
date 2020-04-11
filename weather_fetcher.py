@@ -58,6 +58,5 @@ def get_weather_data(date_list):
     csv_data_file.close() 
 
 
-# date_list = get_date_list('20200229','20200301')  # test
-date_list = get_date_list('20130304','20200301')
+date_list = get_date_list('20130304','20200321')
 get_weather_data(date_list)
