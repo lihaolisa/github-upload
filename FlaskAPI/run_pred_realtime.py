@@ -10,6 +10,7 @@ from datetime import datetime, timedelta, timezone, date
 import os
 import logging
 import googlemaps
+import math
 
 dir_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -90,6 +91,7 @@ def get_realtime_weather():
 
 def pred_all_segments_prob():
     features = get_realtime_congestion()
+    features = features.astype({k: float for k in ['START_LONGITUDE','START_LATITUDE','END_LONGITUDE','END_LATITUDE']})
     cur_weather = get_realtime_weather()
     for i in range(len(cur_weather)):
         features[cur_weather.index[i]] = cur_weather.values[i]
@@ -100,34 +102,27 @@ def pred_all_segments_prob():
     features.to_csv(dir_path + '/data/realtime_features.csv', index=False)
 
     # TODO: Confirm if these are the features to run model. May need value transformation
-    X = features 
+    X = features.loc[:, :] 
     
     model = pickle.load(open(os.path.join(dir_path, 'model.pkl'), 'rb'))
     # TODO: let model prediction run through. Temporarily using random numbers
-    # X['Prob'] = model.predict_proba(X)
-    X['Prob'] = np.random.uniform(size=len(X))
-    X.to_csv(dir_path + '/data/prediction_result.csv', index=False)
+    # features['Prob'] = model.predict_proba(X)
+    features['Prob'] = np.random.uniform(size=len(X))
+    features.to_csv(dir_path + '/data/prediction_result.csv', index=False)
 
     # to json
-    processed_results = X[['SEGMENT_ID', 'START_LONGITUDE','START_LATITUDE','END_LONGITUDE','END_LATITUDE', 'Prob']].set_index('SEGMENT_ID')
+    processed_results = features[['SEGMENT_ID', 'START_LONGITUDE','START_LATITUDE','END_LONGITUDE','END_LATITUDE', 'Prob']].set_index('SEGMENT_ID')
     results_json = processed_results.to_json(orient='index')
     # see an example output format in __main__
+    processed_results.to_json(orient='index', indent=4, path_or_buf=dir_path + '/data/prediction_result.json')
     return results_json
 
 
-def call_google_map(origin, destination):
+def call_google_map(origin, destination, multi_routes):
+    # get routes from google map
     # reference: https://github.com/googlemaps/google-maps-services-python
     google_map_key = 'AIzaSyA723t8eXV4ZpJgaoXBncDXLrlXdzr4tTw'
     gmaps = googlemaps.Client(key=google_map_key)
-
-    # Geocoding an address
-    origin_geocode = gmaps.geocode(origin)
-    print('Origin geocode: ' + origin_geocode)
-    destination_geocode = gmaps.geocode(destination)
-    print('Destination geocode: ' + destination_geocode)
-
-    # Look up an address with reverse geocoding
-    # reverse_geocode_result = gmaps.reverse_geocode((40.714224, -73.961452))
 
     # Request directions 
     now = datetime.now()
@@ -136,123 +131,123 @@ def call_google_map(origin, destination):
     directions_result = gmaps.directions(origin, destination,
                                         mode="driving",
                                         avoid='Highways',
-                                        alternatives=True
+                                        alternatives=multi_routes,
                                         departure_time=now)
-    """                                
-    # parse json to retrieve all lat-lng
-    waypoints = data['routes'][0]['legs']
+    
+    json_out = open(dir_path + '/data/google_map_result.json', 'w')
+    json.dump(directions_result, json_out, indent=4, sort_keys=True)
 
-    lats = []
-    longs = []
-    google_count_lat_long = 0
-
-    # find cluster of interest from google api route
-    for leg in waypoints:
-        for step in leg['steps']:
-            start_loc = step['start_location']
-            # print("lat: " + str(start_loc['lat']) + ", lng: " + str(start_loc['lng']))
-            lats.append(start_loc['lat'])
-            longs.append(start_loc['lng'])
-            google_count_lat_long += 1
-
-    lats = tuple(lats)
-    longs = tuple(longs)
-    print("total waypoints: " + str(google_count_lat_long))
-
-    return lats, longs, google_count_lat_long
-"""
+    return directions_result
 
 
-def calc_distance(accident_dataset, lats, longs, google_count_lat_long):
-    # load all cluster accident waypoints to check against proximity
-    accident_point_counts = len(accident_dataset.index)
+def parse_directions(directions):
+    routes_info = []
+    for route in directions:
+        info = dict()
+        info['distance'] = route['legs'][0]['distance']  # can show on UI
+        info['duration'] = route['legs'][0]['duration']
+        info['points_location'] = [] # list of dictionary, each step's lat lng
+        for step in route['legs'][0]['steps']:
+            info['points_location'].append(step['start_location']) 
+        info['points_location'].append(route['legs'][0]['end_location'])  # add the end point
+        routes_info.append(info)
 
-    # approximate radius of earth in km
-    R = 6373.0
-    new = accident_dataset.append([accident_dataset] * (google_count_lat_long - 1), ignore_index=True)  # repeat data frame (9746*waypoints_count) times
-    lats_r = list(
-        itertools.chain.from_iterable(itertools.repeat(x, accident_point_counts) for x in lats))  # repeat 9746 times
-    longs_r = list(itertools.chain.from_iterable(itertools.repeat(x, accident_point_counts) for x in longs))
-
-    # append
-    new['lat2'] = np.radians(lats_r)
-    new['long2'] = np.radians(longs_r)
-
-    # cal radiun50m
-    new['lat1'] = np.radians(new['Latitude'])
-    new['long1'] = np.radians(new['Longitude'])
-    new['dlon'] = new['long2'] - new['long1']
-    new['dlat'] = new['lat2'] - new['lat1']
-
-    new['a'] = np.sin(new['dlat'] / 2) ** 2 + np.cos(new['lat1']) * np.cos(new['lat2']) * np.sin(new['dlon'] / 2) ** 2
-    new['distance'] = R * (2 * np.arctan2(np.sqrt(new['a']), np.sqrt(1 - new['a'])))
-
-    return new
+    json_out = open(dir_path + '/data/parsed_routes_info.json', 'w')
+    json.dump(routes_info, json_out, indent=4, sort_keys=True)
+    return routes_info
 
 
-def pred_search_route_prob(origin, destination):
+def rad(d):
+    return d * math.pi / 180.0
+
+def get_distance_btw_points(lat1, lng1, lat2, lng2):
+    # https://blog.csdn.net/tonkeytong/java/article/details/51445440
+    EARTH_RADIUS = 6378.137  # in km
+    radLat1 = rad(lat1)
+    radLat2 = rad(lat2)
+    a = radLat1 - radLat2
+    b = rad(lng1) - rad(lng2)
+    s = 2 * math.asin(math.sqrt(math.pow(math.sin(a/2),2) + math.cos(radLat1) * math.cos(radLat2) * math.pow(math.sin(b/2),2)))
+    s = s * EARTH_RADIUS
+    return s
+
+
+def get_distance_point_to_line(lat, lon, line):
+    # https://blog.csdn.net/ufoxiong21/article/details/46487001, section 2
+    a = line['distance']
+    b = get_distance_btw_points(lat, lon, line['START_LATITUDE'], line['START_LONGITUDE'])
+    c = get_distance_btw_points(lat, lon, line['END_LATITUDE'], line['END_LATITUDE'])
+    if b*b >= c*c + a*a:
+        return c
+    if c*c >= b*b + a*a:
+        return b
+    l = (a + b + c) / 2     # 周长的一半   
+    s = math.sqrt(l*(l-a)*(l-b)*(l-c))  # 海伦公式求面积 
+    return 2*s/a
+
+
+def find_segment_id(lat, lon, dict_id_map):
+    closest_id = np.nan
+    min_dist = math.inf
+    for key, value in dict_id_map.items():  # find segment id with min distance
+        cur_dist = get_distance_point_to_line(lat, lon, value)
+        if cur_dist < min_dist:
+            min_dist = cur_dist
+            closest_id = key
+    return closest_id
+
+
+def find_routes_segments(routes, segment_info):
+    # get length of segment
+    for v in segment_info.values():
+        v['distance'] = get_distance_btw_points(v['START_LATITUDE'], v['START_LONGITUDE'], v['END_LATITUDE'], v['END_LONGITUDE'])
+    json_out = open(dir_path + '/data/segment_info.json', 'w')
+    json.dump(segment_info, json_out, indent=4, sort_keys=True)
+    
+    # assign points to segments
+    for i in range(len(routes)):
+        segments = set()
+        for point in routes[i]['points_location']:
+            closest_segment = find_segment_id(point['lat'], point['lng'], segment_info)
+            if closest_segment not in segments:
+                segments.add(closest_segment)
+        routes[i]['segment_IDs'] = list(segments)
+
+    json_out = open(dir_path + '/data/parsed_routes_info.json', 'w')
+    json.dump(routes, json_out, indent=4, sort_keys=True)
+    return routes
+
+
+def pred_search_route_prob(origin, destination, pred_result_json):
+    segment_info = json.loads(pred_result_json)  # load as dict: segment ID, lat lgn, prob
+    segment_info = {int(k): v for k, v in segment_info.items()}
+    
     # get route planning
-    call_google_map(origin, destination)
-    """
-    lats, longs, google_count_lat_long = 
+    directions_result = call_google_map(origin, destination, multi_routes=True)
+    # parse directions_result
+    routes_info = parse_directions(directions_result)
+    # use step locations on the routes, find segment IDs
+    routes_info = find_routes_segments(routes_info, segment_info)
 
-    # calculate distance between past accident points and route
-    dist = calc_distance(accident_dataset, lats, longs, google_count_lat_long)
+    # predict route crash prob
+    for route in routes_info:
+        prob_no_crash = 1
+        for seg in route['segment_IDs']:
+            seg_crash = segment_info[seg]['Prob']
+            prob_no_crash *= (1 - seg_crash)
+        route['crash prob'] = 1 - prob_no_crash
+    
+    json_out = open(dir_path + '/data/parsed_routes_info.json', 'w')
+    json.dump(routes_info, json_out, indent=4, sort_keys=True)
+    return json.dumps(routes_info)
+    
 
-    # filter for past accident points with distance <50m - route cluster
-    dat = dist[dist['distance'] < 0.050][['Longitude','Latitude','Day_of_Week','Local_Authority_(District)',
-                                               '1st_Road_Class','1st_Road_Number','Speed_limit', 'Year','Cluster',
-                                               'Day_of_year', 'Hour']]
-
-    #if no cluster, exit
-    if len(dat) == 0:
-        return print(" Hooray! No accidents predicted in your route.")
-
-    else:
-        # filter for accident points in route cluster
-        #dat = accident_dataset[accident_dataset['Cluster'].isin(list(clusters['Cluster']))]
-        dat = dat.drop(columns=['Hour', 'Day_of_year', 'Day_of_Week', 'Year'], axis=0)
-        dat['Hour'] = datetime_object.hour
-        day_of_year = (datetime_object - datetime.datetime(datetime_object.year, 1, 1)).days + 1
-        dat['Day_of_year'] = day_of_year
-        day_of_week = datetime_object.date().weekday() + 1
-        dat['Day_of_Week'] = day_of_week
-        dat['Year'] = datetime_object.year
-
-        #get weather prediction for unique cluster in past accident dataset
-        ucluster = list(dat['Cluster'].unique())
-        clusters = dat[dat['Cluster'].isin(ucluster)].drop_duplicates(subset='Cluster', keep='first')
-        weather = call_darksky(clusters, darkskykey, tm)
-
-        # merge with accident data - df with latlong and weather
-        final_df = pd.merge(dat, weather, how='left', on=['Cluster'])
-        final_df = final_df.drop(columns=['time', 'summary', 'icon', 'ozone'], axis=0)
-        final_df = final_df[model_columns]
-
-        #run model predicition
-        processed_results = model_pred(final_df)
-
-        final = {}
-        final["accidents"] = processed_results
-
-        return final
-        """
 if __name__ == "__main__":
-    # pred_result_json = pred_all_segments_prob()  # to show heat map
-    # example of pred_result_json:
-    # {"1308": {"START_LONGITUDE":"-87.639487",
-    #           "START_LATITUDE":"41.874238",
-    #           "END_LONGITUDE":"-87.627611",
-    #           "END_LATITUDE":"41.874452",
-    #           "Prob":0.5883092195},
-    #  "1309": {"START_LONGITUDE":"-87.639487",
-    #             "START_LATITUDE":"41.874538",
-    #             "END_LONGITUDE":"-87.647125",
-    #             "END_LATITUDE":"41.874438",
-    #             "Prob":0.012699349}}
+    pred_result_json = pred_all_segments_prob()  # to show heat map
+    # example of pred_result_json: see prediction_result.json
     # TODO: need to call Google map to get intermediate points in order to draw lines?
     
     origin = 'Chicago Illuminating Company, 2110 S Wabash Ave, Chicago, IL 60616'
     destination = 'The Bridgeport Art Center, 1200 W 35th St, Chicago, IL 60609'
-    pred_search_route_prob(origin, destination)  # search route by calling google map. return crash prob on each route (number of routes >= 1)
-
+    routes_info_json = pred_search_route_prob(origin, destination, pred_result_json)  # search route by calling google map. return crash prob on each route (number of routes >= 1)
+    # example of routes_info_json: see parsed_routes_info.json

@@ -1,0 +1,650 @@
+[
+    {
+        "bounds": {
+            "northeast": {
+                "lat": 41.8537667,
+                "lng": -87.6254874
+            },
+            "southwest": {
+                "lat": 41.8306214,
+                "lng": -87.65577189999999
+            }
+        },
+        "copyrights": "Map data \u00a92020 Google",
+        "legs": [
+            {
+                "distance": {
+                    "text": "3.2 mi",
+                    "value": 5076
+                },
+                "duration": {
+                    "text": "10 mins",
+                    "value": 570
+                },
+                "duration_in_traffic": {
+                    "text": "8 mins",
+                    "value": 482
+                },
+                "end_address": "1200 W 35th St, Chicago, IL 60609, USA",
+                "end_location": {
+                    "lat": 41.8310348,
+                    "lng": -87.65577189999999
+                },
+                "start_address": "2110 S Wabash Ave, Chicago, IL 60616, USA",
+                "start_location": {
+                    "lat": 41.8537667,
+                    "lng": -87.6255151
+                },
+                "steps": [
+                    {
+                        "distance": {
+                            "text": "312 ft",
+                            "value": 95
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 21
+                        },
+                        "end_location": {
+                            "lat": 41.852912,
+                            "lng": -87.6254874
+                        },
+                        "html_instructions": "Head <b>south</b> on <b>S Wabash Ave</b> toward <b>E Cermak Rd</b>",
+                        "polyline": {
+                            "points": "aqm~FnjyuOzACnAA"
+                        },
+                        "start_location": {
+                            "lat": 41.8537667,
+                            "lng": -87.6255151
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "0.3 mi",
+                            "value": 461
+                        },
+                        "duration": {
+                            "text": "2 mins",
+                            "value": 132
+                        },
+                        "end_location": {
+                            "lat": 41.85294,
+                            "lng": -87.6310536
+                        },
+                        "html_instructions": "Turn <b>right</b> after White Castle (on the right)",
+                        "maneuver": "turn-right",
+                        "polyline": {
+                            "points": "ukm~FhjyuO?Z?nC?p@?RA\\Cl@ElC?h@AP@nB?J@h@@p@?jA?dB@~A?j@?n@?H"
+                        },
+                        "start_location": {
+                            "lat": 41.852912,
+                            "lng": -87.6254874
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "0.2 mi",
+                            "value": 336
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 36
+                        },
+                        "end_location": {
+                            "lat": 41.8500987,
+                            "lng": -87.6310927
+                        },
+                        "html_instructions": "Turn <b>left</b> onto the <b>I-55 S</b>/<wbr/><b>I-90 E</b>/<wbr/><b>I-94 E</b> ramp",
+                        "maneuver": "ramp-left",
+                        "polyline": {
+                            "points": "{km~F`mzuO?n@\\?hACfACjBClCED?fCU"
+                        },
+                        "start_location": {
+                            "lat": 41.85294,
+                            "lng": -87.6310536
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "1.1 mi",
+                            "value": 1779
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 74
+                        },
+                        "end_location": {
+                            "lat": 41.8341331,
+                            "lng": -87.6311619
+                        },
+                        "html_instructions": "Keep <b>left</b> at the fork, follow signs for <b>I-90 E</b>/<wbr/><b>I-94 E</b> and merge onto <b>I-90 E</b>/<wbr/><b>I-94 E</b>",
+                        "maneuver": "fork-left",
+                        "polyline": {
+                            "points": "czl~FhmzuO^ERCRAR?xC@v@@ZBb@DVB@?H@b@Db@F`@DN@@@`@D@?@?F@~@Jt@DB?jAHb@@b@@V@n@?@?`@?b@?r@?|@A@?h@A\\?FA~@Aj@CHAb@A@?\\CRCTFb@Ab@Ab@?b@AfACb@?NAR?b@Ab@Ab@?ZAF?b@?fAAb@Ab@?V?JAjBA`BCj@Jt@AJ?R?B?jBCvFK`DC`CEr@@~A?"
+                        },
+                        "start_location": {
+                            "lat": 41.8500987,
+                            "lng": -87.6310927
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "0.2 mi",
+                            "value": 252
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 15
+                        },
+                        "end_location": {
+                            "lat": 41.8318967,
+                            "lng": -87.6315216
+                        },
+                        "html_instructions": "Take exit <b>55A</b> toward <b>35th St</b>/<wbr/><b>Illinois College of Optometry</b>",
+                        "maneuver": "ramp-right",
+                        "polyline": {
+                            "points": "ivi~FvmzuOPJFBHD`@BR@b@Bb@BP@jBHr@Df@@d@BH@FBHD"
+                        },
+                        "start_location": {
+                            "lat": 41.8341331,
+                            "lng": -87.6311619
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "322 ft",
+                            "value": 98
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 16
+                        },
+                        "end_location": {
+                            "lat": 41.8310199,
+                            "lng": -87.6315358
+                        },
+                        "html_instructions": "Merge onto <b>S Wentworth Ave</b>",
+                        "maneuver": "merge",
+                        "polyline": {
+                            "points": "khi~F~ozuOJ?F?hB@p@@"
+                        },
+                        "start_location": {
+                            "lat": 41.8318967,
+                            "lng": -87.6315216
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "1.2 mi",
+                            "value": 2009
+                        },
+                        "duration": {
+                            "text": "4 mins",
+                            "value": 264
+                        },
+                        "end_location": {
+                            "lat": 41.8306214,
+                            "lng": -87.65576000000001
+                        },
+                        "html_instructions": "Turn <b>right</b> onto <b>W 35th St</b>",
+                        "maneuver": "turn-right",
+                        "polyline": {
+                            "points": "{bi~FbpzuONp@?l@@v@?n@?j@@zB?dA?~A?hB?n@@b@?^@P?^@`A?`@@Z?r@@n@@n@?p@@n@?T?T?fA@zB?\\?vB@|B?P@bB?zB@lA?j@@xB@zB?tB@zB@vB@`B?V@xB?|B?N@V?fA@rA?f@@zB@|B?f@BxD?fCBfC@vD@`DBjF@nF"
+                        },
+                        "start_location": {
+                            "lat": 41.8310199,
+                            "lng": -87.6315358
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "151 ft",
+                            "value": 46
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 12
+                        },
+                        "end_location": {
+                            "lat": 41.8310348,
+                            "lng": -87.65577189999999
+                        },
+                        "html_instructions": "Turn <b>right</b> onto <b>S Racine Ave</b><div style=\"font-size:0.9em\">Destination will be on the left</div>",
+                        "maneuver": "turn-right",
+                        "polyline": {
+                            "points": "k`i~Fng_vOqA@"
+                        },
+                        "start_location": {
+                            "lat": 41.8306214,
+                            "lng": -87.65576000000001
+                        },
+                        "travel_mode": "DRIVING"
+                    }
+                ],
+                "traffic_speed_entry": [],
+                "via_waypoint": []
+            }
+        ],
+        "overview_polyline": {
+            "points": "aqm~FnjyuOjDE?jD?dAEjAEvD?`CBrD@`H?x@fBCfIMnEa@lD@rADfAJ`D\\|BRvCLhA@vDApACtBGbAERCTFfACrDEjBErGEvBC`BCj@J`AAR?hOStDC~A?PJPHt@DdER`CJPDTDpB@p@@Np@@dB?zA@jKBdCFdJDrPPdj@HfXJlU@nFqA@"
+        },
+        "summary": "W 35th St",
+        "warnings": [],
+        "waypoint_order": []
+    },
+    {
+        "bounds": {
+            "northeast": {
+                "lat": 41.8537667,
+                "lng": -87.62545779999999
+            },
+            "southwest": {
+                "lat": 41.8306214,
+                "lng": -87.65577189999999
+            }
+        },
+        "copyrights": "Map data \u00a92020 Google",
+        "legs": [
+            {
+                "distance": {
+                    "text": "3.2 mi",
+                    "value": 5114
+                },
+                "duration": {
+                    "text": "11 mins",
+                    "value": 682
+                },
+                "duration_in_traffic": {
+                    "text": "10 mins",
+                    "value": 572
+                },
+                "end_address": "1200 W 35th St, Chicago, IL 60609, USA",
+                "end_location": {
+                    "lat": 41.8310348,
+                    "lng": -87.65577189999999
+                },
+                "start_address": "2110 S Wabash Ave, Chicago, IL 60616, USA",
+                "start_location": {
+                    "lat": 41.8537667,
+                    "lng": -87.6255151
+                },
+                "steps": [
+                    {
+                        "distance": {
+                            "text": "0.2 mi",
+                            "value": 299
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 60
+                        },
+                        "end_location": {
+                            "lat": 41.851078,
+                            "lng": -87.62545779999999
+                        },
+                        "html_instructions": "Head <b>south</b> on <b>S Wabash Ave</b> toward <b>E Cermak Rd</b><div style=\"font-size:0.9em\">Pass by White Castle (on the right)</div>",
+                        "polyline": {
+                            "points": "aqm~FnjyuOzACnAA\\?f@?fHE"
+                        },
+                        "start_location": {
+                            "lat": 41.8537667,
+                            "lng": -87.6255151
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "433 ft",
+                            "value": 132
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 28
+                        },
+                        "end_location": {
+                            "lat": 41.8510565,
+                            "lng": -87.6270469
+                        },
+                        "html_instructions": "Turn <b>right</b> onto <b>E 23rd St</b>",
+                        "maneuver": "turn-right",
+                        "polyline": {
+                            "points": "g`m~FbjyuO?Z@~A?n@@n@?`B"
+                        },
+                        "start_location": {
+                            "lat": 41.851078,
+                            "lng": -87.62545779999999
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "0.4 mi",
+                            "value": 608
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 77
+                        },
+                        "end_location": {
+                            "lat": 41.8455905,
+                            "lng": -87.626958
+                        },
+                        "html_instructions": "Turn <b>left</b> at the 1st cross street onto <b>S State St</b>",
+                        "maneuver": "turn-left",
+                        "polyline": {
+                            "points": "c`m~F`tyuOxAC`A?`BAlBCr@?lAARFB@@?fDGb@AT?F?@?XAH?D?\\?PAP?|BAfB?"
+                        },
+                        "start_location": {
+                            "lat": 41.8510565,
+                            "lng": -87.6270469
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "0.2 mi",
+                            "value": 399
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 50
+                        },
+                        "end_location": {
+                            "lat": 41.8455229,
+                            "lng": -87.6317761
+                        },
+                        "html_instructions": "Turn <b>right</b> onto <b>W 26th St</b>",
+                        "maneuver": "turn-right",
+                        "polyline": {
+                            "points": "}}k~FnsyuO@tA?r@@zABpE?vA@n@?n@?l@@bA?n@?T?F?N?@?N?T@N?J?P?@?j@"
+                        },
+                        "start_location": {
+                            "lat": 41.8455905,
+                            "lng": -87.626958
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "1.0 mi",
+                            "value": 1621
+                        },
+                        "duration": {
+                            "text": "3 mins",
+                            "value": 191
+                        },
+                        "end_location": {
+                            "lat": 41.8310199,
+                            "lng": -87.6315358
+                        },
+                        "html_instructions": "Turn <b>left</b> onto <b>S Wentworth Ave</b>",
+                        "maneuver": "turn-left",
+                        "polyline": {
+                            "points": "o}k~FrqzuO?PjBA~@AZ?@?BAL?b@AR?J?B?LAB?@?@?r@?vAAH?|@At@A`@?x@Al@?h@AhAAb@?xAGdA?b@?vAA`A?zDAf@AN?rAGz@CH?\\?j@@lCAnEAlCAdCCvEEP?vAAbAANCJ?F?hB@p@@"
+                        },
+                        "start_location": {
+                            "lat": 41.8455229,
+                            "lng": -87.6317761
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "1.2 mi",
+                            "value": 2009
+                        },
+                        "duration": {
+                            "text": "4 mins",
+                            "value": 264
+                        },
+                        "end_location": {
+                            "lat": 41.8306214,
+                            "lng": -87.65576000000001
+                        },
+                        "html_instructions": "Turn <b>right</b> onto <b>W 35th St</b>",
+                        "maneuver": "turn-right",
+                        "polyline": {
+                            "points": "{bi~FbpzuONp@?l@@v@?n@?j@@zB?dA?~A?hB?n@@b@?^@P?^@`A?`@@Z?r@@n@@n@?p@@n@?T?T?fA@zB?\\?vB@|B?P@bB?zB@lA?j@@xB@zB?tB@zB@vB@`B?V@xB?|B?N@V?fA@rA?f@@zB@|B?f@BxD?fCBfC@vD@`DBjF@nF"
+                        },
+                        "start_location": {
+                            "lat": 41.8310199,
+                            "lng": -87.6315358
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "151 ft",
+                            "value": 46
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 12
+                        },
+                        "end_location": {
+                            "lat": 41.8310348,
+                            "lng": -87.65577189999999
+                        },
+                        "html_instructions": "Turn <b>right</b> onto <b>S Racine Ave</b><div style=\"font-size:0.9em\">Destination will be on the left</div>",
+                        "maneuver": "turn-right",
+                        "polyline": {
+                            "points": "k`i~Fng_vOqA@"
+                        },
+                        "start_location": {
+                            "lat": 41.8306214,
+                            "lng": -87.65576000000001
+                        },
+                        "travel_mode": "DRIVING"
+                    }
+                ],
+                "traffic_speed_entry": [],
+                "via_waypoint": []
+            }
+        ],
+        "overview_polyline": {
+            "points": "aqm~FnjyuOpFEfHE?Z@nC@pCzCCpIGVHhDGbAAhFEfB?@tA@nCDhK@nE@vA?|@jDC`@AfBCvEC~DCrBC|BGbGAbFCbBGdAChA@pRIdKIZCpB@p@@Np@@dB@|G@|GBrCFhIDbRPjk@Lj]DlK@nFqA@"
+        },
+        "summary": "S Wentworth Ave and W 35th St",
+        "warnings": [],
+        "waypoint_order": []
+    },
+    {
+        "bounds": {
+            "northeast": {
+                "lat": 41.8537667,
+                "lng": -87.6254874
+            },
+            "southwest": {
+                "lat": 41.8310348,
+                "lng": -87.65769279999999
+            }
+        },
+        "copyrights": "Map data \u00a92020 Google",
+        "legs": [
+            {
+                "distance": {
+                    "text": "2.8 mi",
+                    "value": 4549
+                },
+                "duration": {
+                    "text": "12 mins",
+                    "value": 726
+                },
+                "duration_in_traffic": {
+                    "text": "10 mins",
+                    "value": 594
+                },
+                "end_address": "1200 W 35th St, Chicago, IL 60609, USA",
+                "end_location": {
+                    "lat": 41.8310348,
+                    "lng": -87.65577189999999
+                },
+                "start_address": "2110 S Wabash Ave, Chicago, IL 60616, USA",
+                "start_location": {
+                    "lat": 41.8537667,
+                    "lng": -87.6255151
+                },
+                "steps": [
+                    {
+                        "distance": {
+                            "text": "312 ft",
+                            "value": 95
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 21
+                        },
+                        "end_location": {
+                            "lat": 41.852912,
+                            "lng": -87.6254874
+                        },
+                        "html_instructions": "Head <b>south</b> on <b>S Wabash Ave</b> toward <b>E Cermak Rd</b>",
+                        "polyline": {
+                            "points": "aqm~FnjyuOzACnAA"
+                        },
+                        "start_location": {
+                            "lat": 41.8537667,
+                            "lng": -87.6255151
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "0.5 mi",
+                            "value": 776
+                        },
+                        "duration": {
+                            "text": "3 mins",
+                            "value": 207
+                        },
+                        "end_location": {
+                            "lat": 41.8528486,
+                            "lng": -87.63483649999999
+                        },
+                        "html_instructions": "Turn <b>right</b> after White Castle (on the right)",
+                        "maneuver": "turn-right",
+                        "polyline": {
+                            "points": "ukm~FhjyuO?Z?nC?p@?RA\\Cl@ElC?h@AP@nB?J@h@@p@?jA?dB@~A?j@?n@?H?n@@dB?n@BzF@v@@TJt@C`B?lA"
+                        },
+                        "start_location": {
+                            "lat": 41.852912,
+                            "lng": -87.6254874
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "1.4 mi",
+                            "value": 2268
+                        },
+                        "duration": {
+                            "text": "5 mins",
+                            "value": 270
+                        },
+                        "end_location": {
+                            "lat": 41.8417829,
+                            "lng": -87.65769279999999
+                        },
+                        "html_instructions": "Slight <b>left</b> onto <b>S Archer Ave</b>",
+                        "maneuver": "turn-slight-left",
+                        "polyline": {
+                            "points": "ikm~Fvd{uO`@bANd@Zv@l@|ARh@j@nAPf@Ph@f@tAZz@z@zBp@bBJV~@vBDHFFHLVXJLXZ~@|ARd@\\x@b@`A^`Af@lABFPh@Pd@?BTp@DNBJ?FBJ@H?@BJ@HDTBN@FF^@L@FBLBR@@BHJ`@Lj@^`APb@Pp@Vh@d@nAJT\\~@Rf@FPd@pAVr@^~@DLAR?@@@L\\JTh@vAlAbDx@zBBDDJHRt@pBPb@@@?@@B~@~BLVf@nA?Bf@jAR`@FLBBNNb@vA`@bAz@xBx@pB\\z@l@`BlAbDb@vAd@fAx@rB"
+                        },
+                        "start_location": {
+                            "lat": 41.8528486,
+                            "lng": -87.63483649999999
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "0.3 mi",
+                            "value": 508
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 81
+                        },
+                        "end_location": {
+                            "lat": 41.8379522,
+                            "lng": -87.6543578
+                        },
+                        "html_instructions": "Turn <b>left</b> onto <b>S Loomis St</b>",
+                        "maneuver": "turn-left",
+                        "polyline": {
+                            "points": "cfk~Fps_vOdA}@fEqDHGRQHI~AsA`Ay@dHwF"
+                        },
+                        "start_location": {
+                            "lat": 41.8417829,
+                            "lng": -87.65769279999999
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "446 ft",
+                            "value": 136
+                        },
+                        "duration": {
+                            "text": "1 min",
+                            "value": 20
+                        },
+                        "end_location": {
+                            "lat": 41.8379167,
+                            "lng": -87.65599979999999
+                        },
+                        "html_instructions": "Turn <b>right</b> onto <b>W 31st St</b>",
+                        "maneuver": "turn-right",
+                        "polyline": {
+                            "points": "enj~Fv~~uO?tABxB@r@?bA"
+                        },
+                        "start_location": {
+                            "lat": 41.8379522,
+                            "lng": -87.6543578
+                        },
+                        "travel_mode": "DRIVING"
+                    },
+                    {
+                        "distance": {
+                            "text": "0.5 mi",
+                            "value": 766
+                        },
+                        "duration": {
+                            "text": "2 mins",
+                            "value": 127
+                        },
+                        "end_location": {
+                            "lat": 41.8310348,
+                            "lng": -87.65577189999999
+                        },
+                        "html_instructions": "Turn <b>left</b> onto <b>S Racine Ave</b><div style=\"font-size:0.9em\">Destination will be on the right</div>",
+                        "maneuver": "turn-left",
+                        "polyline": {
+                            "points": "_nj~F~h_vOvAA~ACvDApDEtDAhAAzACL?xA?tFM^EdBC"
+                        },
+                        "start_location": {
+                            "lat": 41.8379167,
+                            "lng": -87.65599979999999
+                        },
+                        "travel_mode": "DRIVING"
+                    }
+                ],
+                "traffic_speed_entry": [],
+                "via_waypoint": []
+            }
+        ],
+        "overview_polyline": {
+            "points": "aqm~FnjyuOjDE?jD?dAEjAEvD?`CBrDBpNDrHLjACnDp@hBhAtC~@xBfBbFlB~EjAnCn@x@d@h@~@|ARd@`AzBfAnCf@zA^tAVzAXbBXlAp@dBPp@Vh@p@dB~AjEv@rBDLAR@BXr@tD|JzC|H|AvDZn@RRdAzCtBjFjA|ClAbDb@vA~AzDlGoFfCwBfJqHBnE@vBvDEhRKhBCxA?tFM^EdBC"
+        },
+        "summary": "S Archer Ave",
+        "warnings": [],
+        "waypoint_order": []
+    }
+]
