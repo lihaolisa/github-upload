@@ -11,4 +11,4 @@ cd /Users/lihao/Documents/OMSCS/DataVisualAnalytics/team181project/code/FlaskAPI
 
 python app.py
 
-Then open the localhost in your Google Chrome, http://127.0.0.1:5000/
+Then open the localhost in your Google Chrome, http://0.0.0.0:5050/
