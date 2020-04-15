@@ -13,6 +13,8 @@ python app.py
 
 Then open the localhost in your Google Chrome, http://0.0.0.0:5050/
 
-Sample search on map:
+## Sample search on map:
+
 Origin: Chicago Illuminating Company
+
 Destination: The Bridgeport Art Center

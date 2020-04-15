@@ -149,7 +149,9 @@
             return;
         }
         var me = this;
-        var safest_route = null;
+        var safest_route = 0;
+        crash_probs_obj = new Array();
+        var crash_prob = null;
         // Sending and receiving data in JSON format using POST method
         var request = new XMLHttpRequest();
         var url = "{{ url_for('call_search_route') }}";
@@ -158,10 +160,10 @@
         request.onreadystatechange = function () {
             if (request.readyState === 4 && request.status === 200) {
                 var routes_info = JSON.parse(request.responseText);
-                var crash_probs_obj = get_route_crash_prob(routes_info); 
+                crash_probs_obj = get_route_crash_prob(routes_info); 
                 console.log(crash_probs); // {W 35th St: 0.999139671294772, S Wentworth Ave and W 35th St: 0.9987598500448908, S Archer Ave: 0.9999264620089191}
                 safest_route = get_safest_route(crash_probs_obj);  // summary of the safest route
-                console.log('safest_route is ' + safest_route)
+                console.log('safest prob is ' + safest_route)
             }
         };
         var data = JSON.stringify({"origin": document.getElementById("origin-input").value,
@@ -177,37 +179,33 @@
             },
             function(response, status) {
                 if (status === 'OK') {
-                    // me.directionsDisplay.setDirections(response);  // display 1 route and markers on map
                     for (var i = 0; i < response.routes.length; i++) {  // display alternative routes
                         // console.log(Object.keys(response.routes[i]));
                         // ["bounds", "copyrights", "legs", "overview_polyline", "summary", "warnings", "waypoint_order", "overview_path"]
-                        console.log('here is var i = 0; i < response.routes.length; i++')
-                        console.log(safest_route)
-                        console.log(response.routes[i].summary)
-                        if (i == 0) {  // Google's recommended route
+                        // var route_name = response.routes[i].summary;
+                        crash_prob = crash_probs_obj[Math.min(i, crash_probs_obj.length-1)];  // assume route index match with python call
+                        // console.log(route_name)
+                        console.log(crash_prob)
+                        if (crash_prob == safest_route){ // recomment the safest route
                             new google.maps.DirectionsRenderer({
                                 map: this.map,
                                 directions: response,
                                 routeIndex: i,
-                                polylineOptions: {strokeColor: "RoyalBlue", strokeWeight: 8, strokeOpacity: 0.9}
+                                polylineOptions: {strokeColor: getColor(crash_prob), strokeWeight: 8, strokeOpacity: 0.9}
                             });
                         } else {
-                            if (response.routes[i].summary == safest_route) {  // safest route by our algorithm
-                                new google.maps.DirectionsRenderer({
-                                    map: this.map,
-                                    directions: response,
-                                    routeIndex: i,
-                                    polylineOptions: {strokeColor: "Green", strokeWeight: 8, strokeOpacity: 0.7}
-                                });
-                            } else {  // others
-                                new google.maps.DirectionsRenderer({
-                                    map: this.map,
-                                    directions: response,
-                                    routeIndex: i,
-                                    polylineOptions: {strokeColor: "Gray", strokeWeight: 6, strokeOpacity: 0.6}
-                                });
-                            }
-                        }
+                            new google.maps.DirectionsRenderer({
+                                map: this.map,
+                                directions: response,
+                                routeIndex: i,
+                                polylineOptions: {strokeColor: getColor(crash_prob), strokeWeight: 6, strokeOpacity: 0.6}
+                            })
+                        };
+                        var infowindow = new google.maps.InfoWindow({
+                            content: response.routes[i].legs[0].distance.text + '<br>' + response.routes[i].legs[0].duration.text + '<br>crash prob: ' + crash_prob.toFixed(2),
+                            position: response.routes[i].legs[0].steps[Math.round((response.routes[i].legs[0].steps.length - 1) / 2)].start_location
+                        });
+                        infowindow.open(this.map);
                     }
                 } else {
                     window.alert('Directions request failed due to ' + status);
@@ -215,34 +213,30 @@
             });
     };
 	function get_route_crash_prob(routes_info) {
-        // TODO: display distance, duration and crash prob for each route
-        // set_tips_on_map(null);
-        crash_probs = new Object();
+        crash_probs = new Array();
         for(var i = 0; i < routes_info.length; i++)
             {
-                // var marker = new google.maps.Marker({
-                //     position: new google.maps.LatLng( accident_json.accidents[i].lat, accident_json.accidents[i].lng),
-                //     map: map,
-                //     icon: icon,
-                //     title: 'Probability: ' + accident_json.accidents[i].probability.toString()
-                // });
-                // markers.push(marker);
-                crash_probs[routes_info[i].summary] = routes_info[i].crash_prob
+                crash_probs.push(routes_info[i].crash_prob)
             }
-        // set_tips_on_map(map);
         return crash_probs
     }
 
-    function get_safest_route(hash) {
-        var safest_key;
-        var lowest_prob = 1.1;
-        for(var key in hash){
-            if (hash[key] < lowest_prob) {
-                lowest_prob = hash[key];
-                safest_key = key
-            }
-        }
-        return safest_key
+    function get_safest_route(crash_probs) {
+        // var safest_key;
+        // var lowest_prob = 1.1;
+        // for(var key in hash){
+        //     if (hash[key] < lowest_prob) {
+        //         lowest_prob = hash[key];
+        //         safest_key = key
+        //     }
+        // }
+        // return safest_key
+        return Math.min.apply(Math, crash_probs)
+    }
+
+    function getColor(value) {
+        var hue=((1-value)*120).toString(10);
+        return ["hsl(",hue,",100%,35%)"].join("");
     }
 
     // Sets route planning tips on map.

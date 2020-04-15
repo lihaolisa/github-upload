@@ -1,6 +1,6 @@
 [
     {
-        "crash_prob": 0.24729868852259673,
+        "crash_prob": 0.16890493781462768,
         "distance": {
             "text": "3.2 mi",
             "value": 5076
@@ -57,7 +57,7 @@
         "summary": "W 35th St"
     },
     {
-        "crash_prob": 0.3413664190467136,
+        "crash_prob": 0.27284857921142436,
         "distance": {
             "text": "3.2 mi",
             "value": 5114
@@ -112,7 +112,7 @@
         "summary": "S Wentworth Ave and W 35th St"
     },
     {
-        "crash_prob": 0.2954044712062178,
+        "crash_prob": 0.27224311772547405,
         "distance": {
             "text": "2.8 mi",
             "value": 4549
