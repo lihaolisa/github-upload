@@ -1,0 +1,11 @@
+
+*.pyc
+FlaskAPI/static/css/.DS_Store
+FlaskAPI/static/js/.DS_Store
+*.pyc
+FlaskAPI/__pycache__/run_pred_realtime.cpython-37.pyc
+FlaskAPI/__pycache__/run.cpython-37.pyc
+FlaskAPI/__pycache__/app.cpython-37.pyc
+FlaskAPI/__pycache__/run_pred_realtime.cpython-37.pyc
+FlaskAPI/__pycache__/.DS_Store
+FlaskAPI/.DS_Store
