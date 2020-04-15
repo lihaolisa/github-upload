@@ -107,7 +107,7 @@ def pred_all_segments_prob():
     model = pickle.load(open(os.path.join(dir_path, 'model.pkl'), 'rb'))
     # TODO: let model prediction run through. Temporarily using random numbers
     # features['Prob'] = model.predict_proba(X)
-    features['Prob'] = np.random.uniform(size=len(X))
+    features['Prob'] = np.random.uniform(low=0, high=0.1, size=len(X))
     features.to_csv(dir_path + '/data/prediction_result.csv', index=False)
 
     # to json
@@ -144,6 +144,7 @@ def parse_directions(directions):
     routes_info = []
     for route in directions:
         info = dict()
+        info['summary'] = route['summary']
         info['distance'] = route['legs'][0]['distance']  # can show on UI
         info['duration'] = route['legs'][0]['duration']
         info['points_location'] = [] # list of dictionary, each step's lat lng
@@ -218,8 +219,10 @@ def find_routes_segments(routes, segment_info):
     return routes
 
 
-def pred_search_route_prob(origin, destination, pred_result_json):
-    segment_info = json.loads(pred_result_json)  # load as dict: segment ID, lat lgn, prob
+def pred_search_route_prob(origin, destination):
+    pred_result = open(dir_path + '/data/prediction_result.json', 'r')
+    segment_info = json.load(pred_result)  # load as dict: segment ID, lat lgn, prob
+    pred_result.close()
     segment_info = {int(k): v for k, v in segment_info.items()}
     
     # get route planning
@@ -235,12 +238,12 @@ def pred_search_route_prob(origin, destination, pred_result_json):
         for seg in route['segment_IDs']:
             seg_crash = segment_info[seg]['Prob']
             prob_no_crash *= (1 - seg_crash)
-        route['crash prob'] = 1 - prob_no_crash
+        route['crash_prob'] = 1 - prob_no_crash
     
     json_out = open(dir_path + '/data/parsed_routes_info.json', 'w')
     json.dump(routes_info, json_out, indent=4, sort_keys=True)
     return json.dumps(routes_info)
-    
+
 
 if __name__ == "__main__":
     pred_result_json = pred_all_segments_prob()  # to show heat map
@@ -249,5 +252,5 @@ if __name__ == "__main__":
     
     origin = 'Chicago Illuminating Company, 2110 S Wabash Ave, Chicago, IL 60616'
     destination = 'The Bridgeport Art Center, 1200 W 35th St, Chicago, IL 60609'
-    routes_info_json = pred_search_route_prob(origin, destination, pred_result_json)  # search route by calling google map. return crash prob on each route (number of routes >= 1)
+    routes_info_json = pred_search_route_prob(origin, destination)  # search route by calling google map. return crash prob on each route (number of routes >= 1)
     # example of routes_info_json: see parsed_routes_info.json

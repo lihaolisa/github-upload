@@ -1,32 +1,57 @@
-<!DOCTYPE html>
-<html >
-<head>
-  <meta charset="UTF-8">
-  <title>Deployment Tutorial 1</title>
-  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  
-</head>
+<!DOCTYPE HTML>
+<!--
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Home</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+		<noscript><link rel="stylesheet" href="static/css/noscript.css" /></noscript>
 
-<body style="background: #0a94d4;">
- <div class="login">
-	<h1>Sales Forecasting</h1>
+	</head>
+	<body class="is-preload">
 
-     <!-- Main Input For Receiving Query to our ML -->
-    <form action="{{ url_for('heatmap')}}"method="post">
-    	<input type="text" name="origin" placeholder="rate" required="required" />
-        <input type="text" name="distination" placeholder="sales in first month" required="required" />
-		<input type="text" name="sales in second month" placeholder="sales in second month" required="required" />
-        <button type="submit" class="btn btn-primary btn-block btn-large">Get crash probability</button>
-    </form>
+		<!-- Wrapper -->
+			<div id="wrapper">
 
-   <br>
-   <br>
-   {{ prediction_text }}
+				<!-- Main -->
+		<section id="main" class="wrapper">
+			<div class="inner">
 
- </div>
-</body>
+				<h1 class="major">Chicago Realtime Accident Prediction Map</h1>
+				<p>This interactive map allows you to find accident hotspots along an optimized driving route between two locations in Greater London at a particular time.</p>
+
+				<p>To use the map, please pick : <br />
+					(1) a date/time in the next 48 hours, <br />
+					(2) your  origin and <br />
+					(3) your destination <br />
+
+				<p>Your inputs will result in an API call to Google Map's Geolocation API, which will select the best driving route connecting your origin and your destination.
+					This route will be shown on the map.
+					In addition, your inputs will also trigger an API call , which will provide information about the weather condition in London for your input time.
+					We will then feed all these inputs to our predictive model, which will output the corresponding RTA risk on the map.</p>
+				<p>Refresh page if there are no dropdown boxes in the map. Please note that accident points may take a while to load.</p>
+
+			<div class='col-lg-9'>
+					<iframe src="{{ url_for('route_plan') }}" name="iframe_a" style="height:680px;width:1300px;border: 2px steelblue solid;padding: 15px;margin: 15px"></iframe>
+			</div>
+		</section>
+	</div>
+
+		<script src="static/js/jquery.min.js"></script>
+		<script src="static/js/jquery.scrollex.min.js"></script>
+		<script src="static/js/jquery.scrolly.min.js"></script>
+		<script src="static/js/browser.min.js"></script>
+		<script src="static/js/breakpoints.min.js"></script>
+		<script src="static/js/util.js"></script>
+		<script src="static/js/main.js"></script>
+
+	</body>
 </html>

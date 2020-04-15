@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Route Plan Map</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+        #loading {
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+              position: fixed;
+              display: block;
+              opacity: 0.7;
+              background-color: #fff;
+              z-index: 99;
+              text-align: center;
+              }
+        #loading-image {
+              position: absolute;
+              top: 100px;
+              left: 240px;
+              z-index: 100;
+              }
+        #map {
+            height: 100%;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .controls {
+            margin-top: 10px;
+            border: 1px solid transparent;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            height: 32px;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        .controls_button {
+            margin-top: 18px;
+        }
+        #origin-input,
+        #destination-input {
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 0 11px 0 13px;
+            text-overflow: ellipsis;
+            width: 200px;
+        }
+        #origin-input:focus,
+        #destination-input:focus {
+            border-color: #feb14d;
+        }
+        #mode-selector {
+            color: #fff;
+            background-color: #feb14d;
+            margin-left: 12px;
+            padding: 5px 11px 0px 11px;
+        }
+        #mode-selector label {
+            font-family: Roboto;
+            font-size: 13px;
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+    <!-- add loading screen-->
+    <div id="loading">
+        <img id="loading-image" src="https://cdn-images-1.medium.com/max/800/1*9EBHIOzhE1XfMYoKz1JcsQ.gif" alt="Loading..." />
+    </div>
+
+    <div style="display: none">
+        <input id="origin-input" class="controls" type="text"
+            placeholder="Enter origin">
+
+        <input id="destination-input" class="controls" type="text"
+            placeholder="Enter destination">
+
+        <input id="refresh" class="controls_button" type="reset" value="Clear" onClick="document.location.reload(true)">
+    </div>
+
+    <div id="map"></div>
+
+<script>
+    var map;
+    var markers = [];
+    var color_list = []
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 13,
+            center: {lat: 41.881832, lng: -87.68}, // Location of Chicago 
+            mapTypeControl: false
+        });
+        new AutocompleteDirectionsHandler(map);
+    }
+    function AutocompleteDirectionsHandler(map) {
+        this.map = map;
+        this.originPlaceId = null;
+        this.destinationPlaceId = null;
+        this.travelMode = 'DRIVING';
+        this.directionsService = new google.maps.DirectionsService;
+        this.directionsDisplay = new google.maps.DirectionsRenderer;
+        this.directionsDisplay.setMap(map);
+        
+        var originInput = document.getElementById('origin-input');
+        var destinationInput = document.getElementById('destination-input');
+        var originAutocomplete = new google.maps.places.Autocomplete(originInput);
+        originAutocomplete.setFields(['place_id']);  // only need place field
+        var destinationAutocomplete = new google.maps.places.Autocomplete(destinationInput);
+        destinationAutocomplete.setFields(['place_id']);
+
+        this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+        this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(refresh);
+    }
+
+    AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(
+        autocomplete, mode) {
+        var me = this
+        autocomplete.bindTo('bounds', this.map);
+        autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+            if (!place.place_id) {
+                window.alert('Please select an option from the dropdown list.');
+                return;
+            }
+            if (mode === 'ORIG') {
+                me.originPlaceId = place.place_id;
+            } else {
+                me.destinationPlaceId = place.place_id;
+            }
+            me.route();
+        });
+    };
+
+    AutocompleteDirectionsHandler.prototype.route = function() {
+        if (!this.originPlaceId || !this.destinationPlaceId) {
+            return;
+        }
+        var me = this;
+        var safest_route = null;
+        // Sending and receiving data in JSON format using POST method
+        var request = new XMLHttpRequest();
+        var url = "{{ url_for('call_search_route') }}";
+        request.open("POST", url, false);  //third parameter, if true: the request should be handled asynchronously.
+        request.setRequestHeader("Content-Type", "application/json");
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 && request.status === 200) {
+                var routes_info = JSON.parse(request.responseText);
+                var crash_probs_obj = get_route_crash_prob(routes_info); 
+                console.log(crash_probs); // {W 35th St: 0.999139671294772, S Wentworth Ave and W 35th St: 0.9987598500448908, S Archer Ave: 0.9999264620089191}
+                safest_route = get_safest_route(crash_probs_obj);  // summary of the safest route
+                console.log('safest_route is ' + safest_route)
+            }
+        };
+        var data = JSON.stringify({"origin": document.getElementById("origin-input").value,
+                                "destination": document.getElementById("destination-input").value});
+        request.send(data);  // calls call_search_route() in app.py, which calls google map API in python
+        this.directionsService.route(  // calls google map API again here in JavaScript
+            {
+                origin: {'placeId': this.originPlaceId},
+                destination: {'placeId': this.destinationPlaceId},
+                travelMode: this.travelMode,
+                provideRouteAlternatives: true,
+                avoidHighways: true  // out model doesn't account for highways
+            },
+            function(response, status) {
+                if (status === 'OK') {
+                    // me.directionsDisplay.setDirections(response);  // display 1 route and markers on map
+                    for (var i = 0; i < response.routes.length; i++) {  // display alternative routes
+                        // console.log(Object.keys(response.routes[i]));
+                        // ["bounds", "copyrights", "legs", "overview_polyline", "summary", "warnings", "waypoint_order", "overview_path"]
+                        console.log('here is var i = 0; i < response.routes.length; i++')
+                        console.log(safest_route)
+                        console.log(response.routes[i].summary)
+                        if (i == 0) {  // Google's recommended route
+                            new google.maps.DirectionsRenderer({
+                                map: this.map,
+                                directions: response,
+                                routeIndex: i,
+                                polylineOptions: {strokeColor: "RoyalBlue", strokeWeight: 8, strokeOpacity: 0.9}
+                            });
+                        } else {
+                            if (response.routes[i].summary == safest_route) {  // safest route by our algorithm
+                                new google.maps.DirectionsRenderer({
+                                    map: this.map,
+                                    directions: response,
+                                    routeIndex: i,
+                                    polylineOptions: {strokeColor: "Green", strokeWeight: 8, strokeOpacity: 0.7}
+                                });
+                            } else {  // others
+                                new google.maps.DirectionsRenderer({
+                                    map: this.map,
+                                    directions: response,
+                                    routeIndex: i,
+                                    polylineOptions: {strokeColor: "Gray", strokeWeight: 6, strokeOpacity: 0.6}
+                                });
+                            }
+                        }
+                    }
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+    };
+	function get_route_crash_prob(routes_info) {
+        // TODO: display distance, duration and crash prob for each route
+        // set_tips_on_map(null);
+        crash_probs = new Object();
+        for(var i = 0; i < routes_info.length; i++)
+            {
+                // var marker = new google.maps.Marker({
+                //     position: new google.maps.LatLng( accident_json.accidents[i].lat, accident_json.accidents[i].lng),
+                //     map: map,
+                //     icon: icon,
+                //     title: 'Probability: ' + accident_json.accidents[i].probability.toString()
+                // });
+                // markers.push(marker);
+                crash_probs[routes_info[i].summary] = routes_info[i].crash_prob
+            }
+        // set_tips_on_map(map);
+        return crash_probs
+    }
+
+    function get_safest_route(hash) {
+        var safest_key;
+        var lowest_prob = 1.1;
+        for(var key in hash){
+            if (hash[key] < lowest_prob) {
+                lowest_prob = hash[key];
+                safest_key = key
+            }
+        }
+        return safest_key
+    }
+
+    // Sets route planning tips on map.
+    function set_tips_on_map(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA723t8eXV4ZpJgaoXBncDXLrlXdzr4tTw&language=en&libraries=places&callback=initMap"
+        async defer></script>
+<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<script language="javascript" type="text/javascript">
+     $(window).load(function() {
+     $('#loading').hide();
+  });
+</script>
+</body>
+</html>

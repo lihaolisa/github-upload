@@ -1,6 +1,6 @@
 [
     {
-        "crash prob": 0.9995287868188443,
+        "crash_prob": 0.24729868852259673,
         "distance": {
             "text": "3.2 mi",
             "value": 5076
@@ -53,10 +53,11 @@
             558,
             432,
             913
-        ]
+        ],
+        "summary": "W 35th St"
     },
     {
-        "crash prob": 0.9976365980624002,
+        "crash_prob": 0.3413664190467136,
         "distance": {
             "text": "3.2 mi",
             "value": 5114
@@ -107,10 +108,11 @@
             558,
             912,
             432
-        ]
+        ],
+        "summary": "S Wentworth Ave and W 35th St"
     },
     {
-        "crash prob": 0.9945741502188811,
+        "crash_prob": 0.2954044712062178,
         "distance": {
             "text": "2.8 mi",
             "value": 4549
@@ -156,6 +158,7 @@
             558,
             913,
             113
-        ]
+        ],
+        "summary": "S Archer Ave"
     }
 ]
