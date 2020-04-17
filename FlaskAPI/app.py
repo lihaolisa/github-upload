@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from run_pred_realtime import pred_all_segments_prob, pred_search_route_prob
+import json
 
 app = Flask(__name__)
 
@@ -7,10 +8,15 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@app.route('/call_segment_prob', methods=['POST'])
-def call_segment_prob():  # this is used to visualize heatmap
-    pred_result_json = pred_all_segments_prob()
-    return pred_result_json
+@app.route('/plot_heatmap')
+def plot_heatmap():  # this is used to visualize heatmap
+    data_pred = json.loads(pred_all_segments_prob())
+    # To assign probability to corrected coordinates
+    with open('data/coRef.json') as f:
+        coord_ref = json.load(f)
+    for i in coord_ref:
+        coord_ref[i]['Prob']=data_pred[i]['Prob']
+    return render_template('heatmap.html',data_list=coord_ref)
 
 @app.route('/route_plan')
 def route_plan():

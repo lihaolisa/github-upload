@@ -55,21 +55,6 @@
             text-overflow: ellipsis;
             width: 200px;
         }
-        #origin-input:focus,
-        #destination-input:focus {
-            border-color: #feb14d;
-        }
-        #mode-selector {
-            color: #fff;
-            background-color: #feb14d;
-            margin-left: 12px;
-            padding: 5px 11px 0px 11px;
-        }
-        #mode-selector label {
-            font-family: Roboto;
-            font-size: 13px;
-            font-weight: 300;
-        }
     </style>
 </head>
 <body>
@@ -186,7 +171,7 @@
                         crash_prob = crash_probs_obj[Math.min(i, crash_probs_obj.length-1)];  // assume route index match with python call
                         // console.log(route_name)
                         console.log(crash_prob)
-                        if (crash_prob == safest_route){ // recomment the safest route
+                        if (Math.abs(crash_prob - safest_route) < 10e-8){ // recomment the safest route
                             new google.maps.DirectionsRenderer({
                                 map: this.map,
                                 directions: response,
@@ -203,7 +188,7 @@
                         };
                         var infowindow = new google.maps.InfoWindow({
                             content: response.routes[i].legs[0].distance.text + '<br>' + response.routes[i].legs[0].duration.text + '<br>crash prob: ' + crash_prob.toFixed(2),
-                            position: response.routes[i].legs[0].steps[Math.round((response.routes[i].legs[0].steps.length - 1) / 2)].start_location
+                            position: response.routes[i].legs[0].steps[Math.round((response.routes[i].legs[0].steps.length) / 2)].start_location
                         });
                         infowindow.open(this.map);
                     }
@@ -235,15 +220,14 @@
     }
 
     function getColor(value) {
-        var hue=((1-value)*120).toString(10);
-        return ["hsl(",hue,",100%,35%)"].join("");
+        var hue=(189.624284*value**2 - 308.73048725*value + 121.23779312).toString(10);
+        return ["hsl(",hue,",100%,50%)"].join("");
     }
 
-    // Sets route planning tips on map.
-    function set_tips_on_map(map) {
-        for (var i = 0; i < markers.length; i++) {
-            markers[i].setMap(map);
-        }
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
 </script>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 680px;  /* The height is 400 pixels */
+        width: 1300px;  /* The width is the width of the web page */
+       }
+    </style>
+  </head>
+  <body>
+    <!-- <h3>Real Time Crash Prediction Heatmap</h3> -->
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <script>
+
+// Initialize and add the map
+function initMap() {
+  var chicago = {lat: 41.8773746, lng: -87.705};
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 13, center: chicago});
+      var listPos = JSON.parse('{{ data_list | tojson | safe}}');
+
+      // getcolor
+      function getColor(value){
+            var hue=(189.624284*value**2 - 308.73048725*value + 121.23779312).toString(10);
+            return ["hsl(",hue,",100%,50%)"].join("");
+        }
+
+      for (var i in listPos) {
+        try{
+          var startPoint = new google.maps.LatLng(listPos[i]['START_LATITUDE'], listPos[i]['START_LONGITUDE']);
+          var endPoint = new google.maps.LatLng(listPos[i]['END_LATITUDE'], listPos[i]['END_LONGITUDE']);
+          var PathStyle = new google.maps.Polyline({
+            path: [startPoint, endPoint],
+            strokeColor: getColor(listPos[i]['Prob']),
+            strokeOpacity: 1.0,
+            strokeWeight: 4,
+            map: map
+          });
+        }
+        catch(e){}
+
+      }
+PathStyle.setMap(map);
+}
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key 
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA723t8eXV4ZpJgaoXBncDXLrlXdzr4tTw&libraries=places&callback=initMap">
+    </script>
+  </body>
+</html>

@@ -107,7 +107,7 @@ def pred_all_segments_prob():
     model = pickle.load(open(os.path.join(dir_path, 'model.pkl'), 'rb'))
     # TODO: let model prediction run through. Temporarily using random numbers
     # features['Prob'] = model.predict_proba(X)
-    features['Prob'] = np.random.uniform(low=0, high=0.1, size=len(X))
+    features['Prob'] = np.random.uniform(low=0, high=0.3, size=len(X))
     features.to_csv(dir_path + '/data/prediction_result.csv', index=False)
 
     # to json
@@ -248,7 +248,6 @@ def pred_search_route_prob(origin, destination):
 if __name__ == "__main__":
     pred_result_json = pred_all_segments_prob()  # to show heat map
     # example of pred_result_json: see prediction_result.json
-    # TODO: need to call Google map to get intermediate points in order to draw lines?
     
     origin = 'Chicago Illuminating Company, 2110 S Wabash Ave, Chicago, IL 60616'
     destination = 'The Bridgeport Art Center, 1200 W 35th St, Chicago, IL 60609'
